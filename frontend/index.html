@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetShield | Security Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>🛡️ NetShield</h2>
+
+        <nav>
+            <a href="#" class="active">Dashboard</a>
+            <a href="#alerts">Security Alerts</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            Network Security Monitor
+        </div>
+    </div>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h1>Security Dashboard</h1>
+                <p>Monitor suspicious network activity in real time.</p>
+            </div>
+
+            <div class="status">
+                <span class="status-dot"></span>
+                System Online
+            </div>
+        </header>
+
+        <section class="summary-cards">
+
+            <div class="card">
+                <p>Total Alerts</p>
+                <h2 id="total-alerts">0</h2>
+            </div>
+
+            <div class="card high">
+                <p>High Severity</p>
+                <h2 id="high-alerts">0</h2>
+            </div>
+
+            <div class="card medium">
+                <p>Medium Severity</p>
+                <h2 id="medium-alerts">0</h2>
+            </div>
+
+            <div class="card low">
+                <p>Low Severity</p>
+                <h2 id="low-alerts">0</h2>
+            </div>
+
+        </section>
+
+
+<section class="charts-section">
+
+    <div class="chart-card">
+        <h2>Alert Severity Distribution</h2>
+        <canvas id="severityChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+        <h2>Threat Type Distribution</h2>
+        <canvas id="threatChart"></canvas>
+    </div>
+
+</section>
+
+
+        <section class="alerts-section" id="alerts">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Recent Security Alerts</h2>
+                    <p>Suspicious activity detected by NetShield</p>
+                </div>
+
+                <button onclick="loadAlerts()">Refresh Alerts</button>
+            </div>
+
+
+<!-- Alert Search and Filters -->
+<div class="filter-bar">
+
+    <input
+        type="text"
+        id="search-ip"
+        placeholder="Search by Source IP..."
+    >
+
+    <select id="severity-filter">
+        <option value="">All Severities</option>
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+    </select>
+
+    <select id="type-filter">
+        <option value="">All Threat Types</option>
+        <option value="Possible Port Scan">Possible Port Scan</option>
+        <option value="Repeated SYN Attempts">Repeated SYN Attempts</option>
+        <option value="Traffic Spike">Traffic Spike</option>
+    </select>
+
+</div>
+
+
+            <div id="error-message"></div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Alert Type</th>
+                            <th>Source IP</th>
+                            <th>Severity</th>
+                            <th>Description</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="alerts-table">
+                        <tr>
+                            <td colspan="6">Loading alerts...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <footer>
+            NetShield Network Intrusion Detection System
+        </footer>
+
+    </main>
+
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>

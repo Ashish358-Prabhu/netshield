@@ -1,9 +1,12 @@
 
 from collections import defaultdict
+import requests
+
+
+API_URL = "http://127.0.0.1:8000/alerts"
 
 
 def detect_suspicious_activity(packets):
-
     alerts = []
     source_data = defaultdict(list)
 
@@ -66,6 +69,34 @@ def detect_suspicious_activity(packets):
     return alerts
 
 
+def save_alert_to_api(alert):
+    # Convert detection alert into API format
+    payload = {
+        "alert_type": alert["type"],
+        "source_ip": alert["source_ip"],
+        "severity": alert["severity"],
+        "description": alert["description"]
+    }
+
+    try:
+        response = requests.post(
+            API_URL,
+            json=payload,
+            timeout=5
+        )
+
+        response.raise_for_status()
+
+        result = response.json()
+        print(
+            f"Successfully saved alert! "
+            f"Database ID: {result['alert_id']}"
+        )
+
+    except requests.RequestException as error:
+        print(f"Could not save alert: {error}")
+
+
 if __name__ == "__main__":
 
     from packet_capture import analyze_pcap
@@ -80,7 +111,11 @@ if __name__ == "__main__":
         print("No suspicious activity detected.")
 
     for alert in alerts:
+
         print("\nAlert:", alert["type"])
         print("Source IP:", alert["source_ip"])
         print("Severity:", alert["severity"])
         print("Description:", alert["description"])
+
+        # Automatically save alert to SQLite through FastAPI
+        save_alert_to_api(alert)

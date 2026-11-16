@@ -1,230 +1,147 @@
+# NetShield – Suspicious Network Activity Detection System
 
-# 🛡️ NetShield – Suspicious Network Activity Detection System
+NetShield is a Python-based network security project designed to identify suspicious network activities by analyzing network packet data.
 
-## 📌 About the Project
+It detects potential threats such as port scanning, repeated TCP SYN attempts, and unusual traffic spikes. Detected alerts are stored in an SQLite database and displayed through a web-based dashboard.
 
-NetShield is a Python-based network security project designed to
-analyze network traffic and identify potentially suspicious
-network activities.
+## Features
 
-The system analyzes packet information, tracks network flows,
-and uses rule-based detection techniques to identify patterns
-such as port scanning, traffic spikes, and repeated TCP SYN attempts.
+- **Port Scan Detection:** Identifies devices accessing multiple destination ports.
+- **Repeated SYN Detection:** Detects repeated TCP SYN connection attempts.
+- **Traffic Spike Detection:** Identifies unusually high packet activity.
+- **Alert Management:** Stores detected alerts in an SQLite database.
+- **Duplicate Alert Prevention:** Prevents repeated alerts of the same type from the same IP within a 5-minute window.
+- **Web Dashboard:** Displays alerts, severity statistics, charts, and filtering options.
+- **REST API:** Uses FastAPI to manage and retrieve security alerts.
 
-The main objective is to develop a simple and understandable
-Network Intrusion Detection System (NIDS).
-
----
-
-## 🎯 Project Objectives
-
-- Analyze network packets using Python.
-- Extract source IP, destination IP, ports, protocol and packet size.
-- Track network flows and source IP activity.
-- Detect suspicious network behavior.
-- Generate security alerts based on predefined rules.
-- Build a dashboard to visualize network activity (planned).
-
----
-
-## 🛠️ Technologies Used
+## Technologies Used
 
 | Technology | Purpose |
 |---|---|
-| Python | Core programming language |
-| Scapy | Packet analysis and PCAP processing |
-| FastAPI | Backend API (planned) |
-| SQLite | Database (planned) |
-| React | Frontend dashboard (planned) |
-| Git & GitHub | Version control and collaboration |
+| Python | Detection engine |
+| FastAPI | Backend API |
+| SQLite | Database |
+| HTML | Dashboard structure |
+| CSS | Dashboard styling |
+| JavaScript | Dashboard functionality |
+| Chart.js | Data visualization |
+| Wireshark / PCAP | Network packet data format and analysis context |
 
----
-
-## 📂 Project Structure
+## Project Structure
 
 ```text
-NetShield/
+Netshield/
 │
-├── backend/                  # Backend development
+├── backend/
+│   ├── main.py
+│   ├── database.py
+│   └── netshield.db
 │
 ├── engine/
-│   ├── packet_capture.py     # Reads and analyzes PCAP files
-│   ├── flow_tracker.py       # Groups and tracks network flows
-│   └── detection_engine.py   # Detects suspicious activity
+│   ├── detection_engine.py
+│   └── packet_capture.py
 │
 ├── datasets/
-│   ├── generate_sample.py    # Generates synthetic packets
-│   └── sample.pcap           # Generated sample dataset
+│   └── sample.pcap
 │
-├── tests/                    # Testing
+├── frontend/
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
 │
-├── requirements.txt          # Python dependencies
-├── README.md                 # Project documentation
-└── .gitignore                # Ignored files
+├── .gitignore
+└── README.md
 ```
 
----
+## How It Works
 
-## ⚙️ Features Implemented
+1. The system reads network packet data from a PCAP file.
+2. The Python detection engine analyzes the packets.
+3. It identifies suspicious activities using predefined detection rules.
+4. Detected alerts are sent to the FastAPI backend.
+5. The backend checks for duplicate alerts and stores new alerts in SQLite.
+6. The frontend dashboard retrieves and displays the alerts.
 
-### 1. Packet Analyzer
+## Detected Threats
 
-- Reads offline PCAP files using Scapy.
-- Extracts source and destination IP addresses.
-- Identifies TCP, UDP and ICMP protocols.
-- Extracts source and destination ports.
-- Extracts packet timestamps, sizes and TCP flags.
-
-### 2. Custom Dataset Generation
-
-- Generates synthetic network packets.
-- Includes TCP, UDP and ICMP traffic.
-- Simulates a TCP SYN port scanning pattern.
-- Saves generated traffic as a PCAP file.
-
-### 3. Flow Tracker
-
-- Groups packets using a five-tuple:
-  Source IP, Destination IP, Source Port,
-  Destination Port and Protocol.
-- Tracks packet count and total bytes.
-- Records first-seen and last-seen timestamps.
-- Maintains recent source IP activity.
-
-### 4. Detection Engine
-
-Currently implements three rule-based detections:
-
-| Detection | Threshold | Severity |
+| Threat | Description | Severity |
 |---|---|---|
-| Possible Port Scan | 20 or more unique destination ports | High |
-| Traffic Spike | 100 or more packets | Medium |
-| Repeated SYN Attempts | 30 or more TCP SYN packets | High |
+| Possible Port Scan | Accessing multiple destination ports | High |
+| Repeated SYN Attempts | Repeated TCP SYN packets | High |
+| Traffic Spike | Unusually high packet activity | Medium |
 
-Note: These are initial demonstration thresholds.
-They are not universal security standards.
+## Installation and Setup
 
----
-
-## 💻 Installation and Setup
-
-### Prerequisites
-
-- Python 3.10 or above
-- Git
-- Visual Studio Code (recommended)
-
-### Step 1: Clone the repository
+### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/NetShield.git
-cd NetShield
+git clone YOUR_GITHUB_REPOSITORY_URL
+cd Netshield
 ```
 
-### Step 2: Create a virtual environment
+### 2. Create a virtual environment
 
 ```bash
-python -m venv venv
+python -m venv .venv
 ```
 
-### Step 3: Activate the virtual environment
+### 3. Activate the virtual environment
 
 Windows PowerShell:
 
 ```powershell
-.\venv\Scripts\Activate.ps1
+.venv\Scripts\Activate.ps1
 ```
 
-### Step 4: Install dependencies
+### 4. Install dependencies
 
 ```bash
-pip install -r requirements.txt
+pip install fastapi uvicorn requests scapy
 ```
 
----
+### 5. Start the backend server
 
-## ▶️ How to Run the Project
-
-Run these commands from the main NetShield directory.
-
-### Step 1: Generate sample network traffic
+From the project root:
 
 ```bash
-python datasets/generate_sample.py
+uvicorn backend.main:app --reload
 ```
 
-### Step 2: Analyze packets
+Backend API:
 
-```bash
-python engine/packet_capture.py datasets/sample.pcap
+```text
+http://127.0.0.1:8000
 ```
 
-### Step 3: Track network flows
+API documentation:
 
-```bash
-python engine/flow_tracker.py
+```text
+http://127.0.0.1:8000/docs
 ```
 
-### Step 4: Detect suspicious activity
+### 6. Run the detection engine
+
+Open another terminal, activate the virtual environment, and execute:
 
 ```bash
 python engine/detection_engine.py
 ```
 
-The detection engine analyzes the generated dataset and
-prints alerts for patterns that meet the configured thresholds.
+### 7. Open the frontend
+
+Open `frontend/index.html` using the VS Code Live Server extension.
+
+## Future Enhancements
+
+- Real-time network packet monitoring.
+- Email notifications for critical alerts.
+- More advanced threat detection rules.
+- IP-based threat intelligence integration.
+
+## Project Objective
+
+The main objective of NetShield is to provide a simple network monitoring and suspicious activity detection system that helps identify potentially harmful network behavior through packet analysis and a centralized dashboard.
 
 ---
 
-## 📊 Current Development Status
-
-- [x] Project structure created
-- [x] Python virtual environment configured
-- [x] Custom PCAP dataset generator
-- [x] Packet analyzer
-- [x] Flow tracker
-- [x] Rule-based detection engine
-- [ ] FastAPI backend integration
-- [ ] SQLite database integration
-- [ ] React dashboard
-- [ ] Real-time alert updates
-- [ ] Machine learning-based anomaly detection
-- [ ] Testing with public network intrusion datasets
-
----
-
-## 🚀 Future Enhancements
-
-- Real-time network traffic monitoring.
-- Interactive security dashboard.
-- Live alert notifications.
-- Machine learning-based anomaly detection.
-- Integration with CIC-IDS2017 dataset.
-- Alert history and reporting.
-- Improved detection accuracy and evaluation.
-
----
-
-## 👥 Team Collaboration
-
-This project is developed collaboratively using GitHub.
-
-Team members can contribute through branches and pull requests.
-
----
-
-## ⚠️ Disclaimer
-
-NetShield is an educational cybersecurity project.
-It is intended for defensive network monitoring and
-authorized testing only.
-
-The current implementation uses synthetic packet data
-and basic rule-based detection. Alerts indicate potentially
-suspicious patterns and do not independently prove malicious activity.
-
----
-
-## 📜 License
-
-To be decided.
+**NetShield – Making Network Monitoring Simpler and Smarter
