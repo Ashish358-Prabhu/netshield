@@ -1,5 +1,5 @@
-scapy
-fastapi
-uvicorn[standard]
-sqlalchemy
-pandas
+fastapi==0.110.0
+uvicorn==0.30.1
+scapy==2.8.0
+requests==2.32.3
+pandas==2.2.2

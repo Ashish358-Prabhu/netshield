@@ -99,7 +99,7 @@ def save_alert_to_api(alert):
 
 if __name__ == "__main__":
 
-    from packet_capture import analyze_pcap
+    from .packet_capture import analyze_pcap
 
     packets = analyze_pcap("datasets/sample.pcap")
 
