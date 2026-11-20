@@ -1,5 +1,7 @@
-fastapi==0.110.0
-uvicorn==0.30.1
-scapy==2.8.0
-requests==2.32.3
-pandas==2.2.2
+# requirements.txt  (minimal, works with Python 3.12+ on Windows)
+fastapi>=0.110,<0.113
+uvicorn>=0.30,<0.32
+scapy>=2.8.0,<2.9
+requests>=2.30,<2.35
+pandas>=2.0,<2.3      # optional – only used for future extensions
+# (any other libraries you actually use can stay here)
